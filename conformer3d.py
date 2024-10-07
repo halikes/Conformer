@@ -133,6 +133,9 @@ class ConvBlock3D(nn.Module):
 
 # 5. 将3D卷积特征图转换为Transformer Patch Embeddings (FCUDown3D)
 class FCUDown3D(nn.Module):
+    """ CNN feature maps -> Transformer patch embeddings
+    """
+
     def __init__(self, inplanes, outplanes, dw_stride, act_layer=nn.GELU, norm_layer=partial(nn.LayerNorm, eps=1e-6)):
         super(FCUDown3D, self).__init__()
         self.dw_stride = dw_stride
@@ -151,6 +154,9 @@ class FCUDown3D(nn.Module):
 
 # 6. 将Transformer Patch Embeddings还原为CNN 3D卷积特征 (FCUUp3D)
 class FCUUp3D(nn.Module):
+    """ Transformer patch embeddings -> CNN feature maps
+    """
+
     def __init__(self, inplanes, outplanes, up_stride, act_layer=nn.ReLU, norm_layer=partial(nn.BatchNorm3d, eps=1e-6)):
         super(FCUUp3D, self).__init__()
         self.up_stride = up_stride
@@ -166,6 +172,9 @@ class FCUUp3D(nn.Module):
 
 # 7. 特殊的卷积块 (Med_ConvBlock)
 class Med_ConvBlock(nn.Module):
+    """ special case for Convblock with down sampling,
+    """
+
     def __init__(self, inplanes, act_layer=nn.ReLU, groups=1, norm_layer=partial(nn.BatchNorm3d, eps=1e-6),
                  drop_block=None, drop_path=None):
         super(Med_ConvBlock, self).__init__()
@@ -218,6 +227,10 @@ class Med_ConvBlock(nn.Module):
 
 # 8. ConvTransBlock (用于卷积与Transformer的混合)
 class ConvTransBlock(nn.Module):
+    """
+    Basic module for ConvTransformer, keep feature maps for CNN block and patch embeddings for transformer encoder block
+    """
+    
     def __init__(self, inplanes, outplanes, res_conv, stride, dw_stride, embed_dim, num_heads=12, mlp_ratio=4.,
                  qkv_bias=False, qk_scale=None, drop_rate=0., attn_drop_rate=0., drop_path_rate=0., 
                  last_fusion=False, num_med_block=0, groups=1):
